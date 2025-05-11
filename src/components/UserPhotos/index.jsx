@@ -3,19 +3,30 @@ import { Typography } from "@mui/material";
 
 import "./styles.css";
 import {useParams} from "react-router-dom";
-import models from "../../modelData/models";
 import PhotoComment from "../PhotoComment/index";
+import { useState, useEffect } from "react";
+import fetchModelData from "../../lib/fetchModelData";
 /**
  * Define UserPhotos, a React component of Project 4.
  * 
  */
 
 function UserPhotos () {
-    const user = useParams();
-    const photos = models.photoOfUserModel(user.userId);
+    const { userId } = useParams();
+    const [photos, setPhotos] = useState([]);
+    useEffect(() => {
+        fetchModelData(`/api/photosOfUser/${userId}`)
+            .then(data => {
+                setPhotos(data.photos);
+                // alert(data.message);
+            })
+            .catch(error => {
+                console.error("Error fetching user data:", error);
+            });
+    }, [photos]);
     return (
       <Typography variant="body1">
-        {photos.map((photo, i) => (
+        {photos && photos.map((photo, i) => (
           <div key={photo._id}>
             <div>
               <p>Create At: {photo.date_time}</p>

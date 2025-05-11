@@ -5,7 +5,7 @@
  *
  */
 async function fetchModel(url) {
-  const models = null;
+  let models = null;
   try {
     const response = await fetch(`http://localhost:8081${url}`);
     let ok = response.ok;

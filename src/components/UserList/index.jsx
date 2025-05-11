@@ -8,13 +8,24 @@ import {
 } from "@mui/material";
 
 import "./styles.css";
-import models from "../../modelData/models";
+import fetchModelData from "../../lib/fetchModelData";
 import { Link } from 'react-router-dom'; 
 /**
  * Define UserList, a React component of Project 4.
  */
+import { useState, useEffect } from "react";
+
 function UserList () {
-    const users = models.userListModel();
+    const [users, setUsers] = useState([]); 
+    useEffect(() => {
+      fetchModelData("/api/user/list")
+        .then(data => {
+          setUsers(data.users);
+        })
+    }, [users]);
+
+
+    
     return (
       <div>
         <Typography variant="body1">

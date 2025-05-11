@@ -2,35 +2,47 @@ import React from "react";
 import { Typography, Box, Divider, ImageList, ImageListItem } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import models from "../../modelData/models";
 import "./styles.css";
-
+import fetchModelData from "../../lib/fetchModelData";
+import { useState, useEffect } from "react";
 /**
  * UserDetail component displays detailed information about a user.
  */
 function UserDetail() {
   const { userId } = useParams();
-  const userDetail = models.userModel(userId);
-  const photos = models.photoOfUserModel(userId);
+  const [user, setUser] = useState({}); 
+  useEffect(() => {
+    fetchModelData(`/api/user/${userId}`)
+      .then(data => {
+        setUser(data.user);
+      })
+      .catch(error => {
+        console.error("Error fetching user data:", error);
+      });
+  }, [user]);
 
-  if (!userDetail) {
+
+
+  
+
+  if (!user) {
     return <Typography variant="body1">User not found</Typography>;
   }
 
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        {`${userDetail.first_name} ${userDetail.last_name}`}
+        {`${user.first_name} ${user.last_name}`}
       </Typography>
 
-      {userDetail.description && (
+      {user.description && (
         <Typography variant="body1" paragraph sx={{ fontStyle: 'italic' }}>
-          {userDetail.description}
+          {user.description}
         </Typography>
       )}
 
       <Typography variant="body1" paragraph>
-        Live: {userDetail.location}
+        Live: {user.location}
       </Typography>
 
       <Divider sx={{ my: 2 }} />
@@ -49,18 +61,6 @@ function UserDetail() {
           Gallery
         </Link>
       </Typography>
-      <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-        {photos && photos.map((item) => (
-          <ImageListItem key={item.img}>
-            <img
-              srcSet={`/images/${item.file_name}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-              src={`/images/${item.file_name}?w=164&h=164&fit=crop&auto=format`}
-              alt={item.date_time}
-              loading="lazy"
-            />
-          </ImageListItem>
-        ))}
-      </ImageList>
     </Box>
   );
 }
