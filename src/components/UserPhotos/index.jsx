@@ -2,7 +2,7 @@ import React from "react";
 import { Typography } from "@mui/material";
 
 import "./styles.css";
-import {useParams} from "react-router-dom";
+import {useParams, Link} from "react-router-dom";
 import PhotoComment from "../PhotoComment/index";
 import { useState, useEffect } from "react";
 import fetchModelData from "../../lib/fetchModelData";
@@ -27,20 +27,14 @@ function UserPhotos () {
     return (
       <Typography variant="body1">
         {photos && photos.map((photo, i) => (
+          <Link to={`/photos/detail/${photo._id}`} key={i}>
           <div key={photo._id}>
             <div>
               <p>Create At: {photo.date_time}</p>
               <img src={`/images/${photo.file_name}`} width="300" height="400"/>
             </div>
-            <div>
-              <h3>Comments</h3>
-              {photo.comments && photo.comments.length > 0 ? (
-                <PhotoComment comments={photo.comments} />
-              ): (
-                <div>No comments</div>
-              )}
-            </div>
           </div>
+          </Link>
         ))}
       </Typography>
     );

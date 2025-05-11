@@ -7,8 +7,8 @@ import TopBar from "./components/TopBar";
 import UserDetail from "./components/UserDetail";
 import UserList from "./components/UserList";
 import UserPhotos from "./components/UserPhotos";
-
-
+import UserComment from './components/UserComment';
+import PhotoViewDetail from './components/PhotoViewDetail';
 
 const App = (props) => {
   
@@ -35,6 +35,14 @@ const App = (props) => {
                   <Route
                       path="/photos/:userId"
                       element = {<UserPhotos />}
+                  />
+                  <Route
+                      path="/comments/:userId"
+                      element = {<UserComment />} 
+                  />
+                  <Route
+                      path="/photos/detail/:photoId"
+                      element = {<PhotoViewDetail />} 
                   />
                   <Route path="/users" element={<UserList />} />
                 </Routes>
