@@ -19,7 +19,7 @@ function UserPhotos () {
           <div key={photo._id}>
             <div>
               <p>Create At: {photo.date_time}</p>
-              <img src={`../../images/${photo.file_name}`} width="300" height="400"/>
+              <img src={`/images/${photo.file_name}`} width="300" height="400"/>
             </div>
             <div>
               <h3>Comments</h3>

@@ -1,5 +1,4 @@
 import './App.css';
-
 import React from "react";
 import { Grid, Typography, Paper } from "@mui/material";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -28,9 +27,6 @@ const App = (props) => {
             </Grid>
             <Grid item sm={9}>
               <Paper className="main-grid-item">
-
-
-
                 <Routes>
                   <Route
                       path="/users/:userId"
@@ -42,11 +38,6 @@ const App = (props) => {
                   />
                   <Route path="/users" element={<UserList />} />
                 </Routes>
-
-
-
-
-
               </Paper>
             </Grid>
           </Grid>
