@@ -1,75 +1,100 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Divider,
   List,
   ListItem,
   ListItemText,
-  Typography,
   Stack,
-  Badge
+  Badge,
+  CircularProgress,
+  Box,
+  Typography,
 } from "@mui/material";
-
-import CommentIcon from '@mui/icons-material/Comment';
-import ImageIcon from '@mui/icons-material/Image';
+import { Link } from "react-router-dom";
+import CommentIcon from "@mui/icons-material/Comment";
+import ImageIcon from "@mui/icons-material/Image";
 
 import "./styles.css";
 import fetchModelData from "../../lib/fetchModelData";
-import { Link, useNavigate } from 'react-router-dom';
-/**
- * Define UserList, a React component of Project 4.
- */
-import { useState, useEffect } from "react";
 
 function UserList() {
   const [users, setUsers] = useState([]);
-  const [stats, setStats] = useState({}); 
+  const [stats, setStats] = useState({ photos: {}, comments: {} });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     fetchModelData("/api/user/list")
-      .then(data => {
+      .then((data) => {
         setUsers(data.users);
         setStats({
           photos: data.photoStats,
-          comments: data.commentStats
-        })
+          comments: data.commentStats,
+        });
+        setLoading(false);
       })
-  }, [users]);
+      .catch((err) => {
+        setError("Failed to load users.");
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
 
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", alignItems: "center", p: 2 }}>
+        <CircularProgress size={20} />
+        <Typography sx={{ ml: 1 }}>Loading users...</Typography>
+      </Box>
+    );
+  }
 
+  if (error) {
+    return (
+      <Typography variant="body1" color="error" sx={{ p: 2 }}>
+        {error}
+      </Typography>
+    );
+  }
 
   return (
-    <div>
-      <Typography variant="body1">
-        This is the user list, which takes up 3/12 of the window. You might
-        choose to use <a href="https://mui.com/components/lists/">Lists</a>{" "}
-        and <a href="https://mui.com/components/dividers/">Dividers</a> to
-        display your users like so:
-      </Typography>
-      <List component="nav">
-        {users.map((item) => (
-          <>
-
-            <ListItem
-            >
-              <Link to={`/users/${item._id}`}><ListItemText primary={item.first_name} /></Link> {" "}
-              <Stack spacing={2} direction="row">
-                <Badge badgeContent={stats.photos[item._id]} color="success">
-                  <Link to={`/photos/${item._id}`}><ImageIcon color="action" /></Link>
+    <List component="nav">
+      {users.map((user) => (
+        <React.Fragment key={user._id}>
+          <ListItem
+            secondaryAction={
+              <Stack spacing={1.5} direction="row">
+                <Badge
+                  badgeContent={stats.photos[user._id] || 0}
+                  color="success"
+                >
+                  <Link to={`/photos/${user._id}`}>
+                    <ImageIcon color="action" />
+                  </Link>
                 </Badge>
-                <Badge badgeContent={stats.comments[item._id]} color="error">
-                  <Link to={`/comments/${item._id}`}><CommentIcon color="action" /></Link>
-                  
+                <Badge
+                  badgeContent={stats.comments[user._id] || 0}
+                  color="error"
+                >
+                  <Link to={`/comments/${user._id}`}>
+                    <CommentIcon color="action" />
+                  </Link>
                 </Badge>
               </Stack>
-            </ListItem>
-
-            <Divider />
-          </>
-        ))}
-      </List>
-      <Typography variant="body1">
-        The model comes in from models.userListModel()
-      </Typography>
-    </div>
+            }
+          >
+            <ListItemText
+              primary={
+                <Link to={`/users/${user._id}`} className="user-link">
+                  {user.first_name}
+                </Link>
+              }
+            />
+          </ListItem>
+          <Divider />
+        </React.Fragment>
+      ))}
+    </List>
   );
 }
 

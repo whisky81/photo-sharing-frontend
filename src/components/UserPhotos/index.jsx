@@ -1,43 +1,32 @@
 import React from "react";
-import { Typography } from "@mui/material";
-
 import "./styles.css";
-import {useParams, Link} from "react-router-dom";
-import PhotoComment from "../PhotoComment/index";
-import { useState, useEffect } from "react";
-import fetchModelData from "../../lib/fetchModelData";
-/**
- * Define UserPhotos, a React component of Project 4.
- * 
- */
+import { useParams } from "react-router-dom";
+import PhotoList from "../PhotoList";
+import fetchModel from "../../lib/fetchModelData";
+import { CircularProgress, Typography, Box } from "@mui/material";
 
-function UserPhotos () {
+function UserPhotos() {
     const { userId } = useParams();
-    const [photos, setPhotos] = useState([]);
-    useEffect(() => {
-        fetchModelData(`/api/photosOfUser/${userId}`)
+    const [photos, setPhotos] = React.useState();
+    const [owner, setOwner] = React.useState();
+
+    React.useEffect(() => {
+        fetchModel(`/api/photo/user/${userId}`)
             .then(data => {
                 setPhotos(data.photos);
-                // alert(data.message);
+                setOwner(data.owner);
             })
-            .catch(error => {
-                console.error("Error fetching user data:", error);
-            });
-    }, [photos]);
-    return (
-      <Typography variant="body1">
-        {photos && photos.map((photo, i) => (
-          <Link to={`/photos/detail/${photo._id}`} key={i}>
-          <div key={photo._id}>
-            <div>
-              <p>Create At: {photo.date_time}</p>
-              <img src={`/images/${photo.file_name}`} width="300" height="400"/>
-            </div>
-          </div>
-          </Link>
-        ))}
-      </Typography>
-    );
+    }, [userId]);
+    if (!photos || !owner || owner._id !== userId) {
+        return (
+            <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <CircularProgress size={20} />
+                <Typography variant="body1">Loading photos...</Typography>
+            </Box>
+        )
+    }
+
+    return <PhotoList photos={photos} owner={owner} />;
 }
 
 export default UserPhotos;

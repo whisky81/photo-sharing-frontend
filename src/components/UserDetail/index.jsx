@@ -1,38 +1,52 @@
-import React from "react";
-import { Typography, Box, Divider, ImageList, ImageListItem } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Typography, Box, Divider, CircularProgress } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
-import "./styles.css";
 import fetchModelData from "../../lib/fetchModelData";
-import { useState, useEffect } from "react";
-/**
- * UserDetail component displays detailed information about a user.
- */
+import PhotoList from "../PhotoList";
+import "./styles.css";
+
 function UserDetail() {
   const { userId } = useParams();
-  const [user, setUser] = useState({}); 
+  const [user, setUser] = useState(null);
+  const [photos, setPhotos] = useState(null);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
-    fetchModelData(`/api/user/${userId}`)
-      .then(data => {
-        setUser(data.user);
-      })
-      .catch(error => {
-        console.error("Error fetching user data:", error);
-      });
-  }, [user]);
+    const fetchUserPhotos = async () => {
+      try {
+        const data = await fetchModelData(`/api/photo/user/${userId}`);
+        setUser(data.owner);
+        setPhotos(data.photos);
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+        setError("Failed to load user data.");
+      }
+    };
 
+    fetchUserPhotos();
+  }, [userId]);
 
+  if (error) {
+    return (
+      <Box sx={{ p: 2 }}>
+        <Typography variant="body1" color="error">{error}</Typography>
+      </Box>
+    );
+  }
 
-  
-
-  if (!user) {
-    return <Typography variant="body1">User not found</Typography>;
+  if (!user || !photos || user._id !== userId) {
+    return (
+      <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+        <CircularProgress size={20} />
+        <Typography variant="body1">Loading user data...</Typography>
+      </Box>
+    );
   }
 
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        {`${user.first_name} ${user.last_name}`}
+        {`${user.first_name ?? ''} ${user.last_name ?? ''}`}
       </Typography>
 
       {user.description && (
@@ -42,25 +56,12 @@ function UserDetail() {
       )}
 
       <Typography variant="body1" paragraph>
-        Live: {user.location}
+        Live: {user.location || 'Unknown'}
       </Typography>
 
       <Divider sx={{ my: 2 }} />
 
-      <Typography variant="h6" component="h2">
-        <Link
-          to={`/photos/${userId}`}
-          style={{
-            textDecoration: 'none',
-            color: 'inherit',
-            '&:hover': {
-              textDecoration: 'underline'
-            }
-          }}
-        >
-          Gallery
-        </Link>
-      </Typography>
+      <PhotoList photos={photos} owner={user} />
     </Box>
   );
 }

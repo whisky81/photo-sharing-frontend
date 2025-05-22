@@ -18,7 +18,7 @@ async function fetchModel(url) {
     models = data; 
   } catch (error) {
     models = {
-      message: error.message 
+      message: error?.message || "Failed To Fetch" 
     }
   }
   return models;
