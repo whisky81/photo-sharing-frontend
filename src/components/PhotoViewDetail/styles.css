@@ -1,0 +1,64 @@
+
+.photo-view-container {
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+.photo-card {
+  border-radius: 24px;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.photo-avatar {
+  background-color: var(--mui-palette-primary-main);
+}
+
+.photo-image-wrapper {
+  padding: 16px;
+}
+
+.photo-image {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.photo-header-sub {
+  margin-top: 4px;
+}
+
+.photo-comments-title {
+  display: flex;
+  align-items: center;
+}
+
+.photo-no-comments {
+  text-align: center;
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+.photo-no-comments-icon {
+  font-size: 60px;
+  margin-bottom: 8px;
+  color: var(--mui-palette-action-disabled);
+}
+
+.photo-comment-box {
+  padding-left: 64px;
+  padding-top: 8px;
+}
+
+.photo-loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.photo-error-container {
+  padding: 32px;
+  text-align: center;
+}

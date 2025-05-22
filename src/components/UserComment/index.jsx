@@ -13,6 +13,7 @@ import {
   Divider,
 } from "@mui/material";
 import PhotoComment from '../PhotoComment';
+import './styles.css';
 
 export default function UserComments() {
   const { userId } = useParams();
@@ -38,16 +39,16 @@ export default function UserComments() {
 
   if (loading) {
     return (
-      <Container sx={{ p: 3, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Container className="user-comments-loading">
         <CircularProgress size={30} />
-        <Typography variant="body1" sx={{ ml: 2 }}>Loading user comments...</Typography>
+        <Typography variant="body1" sx={{ marginLeft: 2 }}>Loading user comments...</Typography>
       </Container>
     );
   }
 
   if (error || !user) {
     return (
-      <Container sx={{ p: 3 }}>
+      <Container className="user-comments-error">
         <Typography variant="h6" color="error">
           {error || "User not found."}
         </Typography>
@@ -56,39 +57,35 @@ export default function UserComments() {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Box sx={{ mb: 4 }}>
+    <Container maxWidth="lg" className="user-comments-container">
+      <Box className="user-comments-header">
         <Typography variant="h4" component="h1" gutterBottom>
           Comments by {user.first_name} {user.last_name}
         </Typography>
         <Typography variant="subtitle1" color="text.secondary">
           {comments.length} {comments.length === 1 ? 'comment' : 'comments'} found
         </Typography>
-        <Divider sx={{ my: 3 }} />
+        <Divider className="user-comments-divider" />
       </Box>
 
       {comments.length === 0 ? (
-        <Typography variant="body1" sx={{ textAlign: 'center', py: 4 }}>
+        <Typography variant="body1" className="user-comments-empty">
           No comments available for this user.
         </Typography>
       ) : (
         <Grid container spacing={3}>
           {comments.map((item) => (
             <Grid item xs={12} sm={6} md={4} key={item._id}>
-              <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <Card className="user-comments-card">
                 <Link to={`/photos/detail/${item._id}`} style={{ textDecoration: 'none' }}>
                   <CardMedia
                     component="img"
                     image={`/images/${item.file_name}?w=300&fit=crop&auto=format`}
                     alt={item.file_name}
-                    sx={{
-                      height: 200,
-                      objectFit: 'cover',
-                      borderBottom: '1px solid rgba(0,0,0,0.12)'
-                    }}
+                    className="user-comments-card-image"
                   />
                 </Link>
-                <CardContent sx={{ flexGrow: 1 }}>
+                <CardContent className="user-comments-card-content">
                   <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                     Photo: {item.file_name}
                   </Typography>

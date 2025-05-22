@@ -1,0 +1,16 @@
+.photo-comment-box {
+  margin-bottom: 16px;
+  padding: 16px;
+  background-color: var(--mui-palette-background-paper);
+  border-radius: 4px;
+}
+
+.photo-comment-chip {
+  margin-bottom: 8px;
+}
+
+.photo-comment-date {
+  margin-top: 8px;
+  display: block;
+  color: var(--mui-palette-text-secondary);
+}

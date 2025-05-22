@@ -1,0 +1,47 @@
+
+.user-comments-loading {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-comments-error {
+  padding: 24px;
+}
+
+.user-comments-container {
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+.user-comments-header {
+  margin-bottom: 32px;
+}
+
+.user-comments-divider {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.user-comments-empty {
+  text-align: center;
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+.user-comments-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-comments-card-image {
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.user-comments-card-content {
+  flex-grow: 1;
+}
